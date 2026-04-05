@@ -3,17 +3,22 @@ import 'dart:developer';
 import 'package:get/get.dart';
 
 class AnimatedController extends GetxController {
-  final RxDouble height = RxDouble(40);
-  final RxDouble width = RxDouble(100);
+  final RxDouble height = RxDouble(40.0);
+  final RxDouble width = RxDouble(100.0);
   final RxBool onTapped = RxBool(false);
+  final RxBool onTapIsDaftar = RxBool(false);
 
-  void isAnimating(double heightTransform, double widthTransform) {
-    if (onTapped.value) {
+  void isAnimating({
+    required double heightTransform,
+    required double widthTransform,
+    required RxBool trigger,
+  }) {
+    if (trigger.value) {
       height.value = heightTransform;
       width.value = widthTransform;
       log("Animasi dimulai - test1");
     } else {
-      // Reset ke ukuran awal jika perlu
+      // Reset ke ukuran awal
       height.value = 40.0;
       width.value = 100.0;
       log("Reset ke ukuran awal");
@@ -23,10 +28,19 @@ class AnimatedController extends GetxController {
 
   void toggleAnimate() {
     onTapped.toggle();
-    if (onTapped.value) {
-      isAnimating(60.0, 200.0); // Contoh nilai animasi
-    } else {
-      isAnimating(40.0, 100.0); // Kembali ke ukuran awal
-    }
+    isAnimating(
+      heightTransform: onTapped.value ? 60.0 : 40.0,
+      widthTransform: onTapped.value ? 200.0 : 100.0,
+      trigger: onTapped,
+    );
+  }
+
+  void toggleAnimateDaftar() {
+    onTapIsDaftar.toggle();
+    isAnimating(
+      heightTransform: onTapIsDaftar.value ? 80.0 : 60.0,
+      widthTransform: onTapIsDaftar.value ? 200.0 : 100.0,
+      trigger: onTapIsDaftar,
+    );
   }
 }

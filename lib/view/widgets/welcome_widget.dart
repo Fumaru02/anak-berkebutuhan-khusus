@@ -7,7 +7,6 @@ import 'package:anak_berkebutuhan_khusus/utils/space_sizer.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/blue_strip.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/ripple_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class WelcomeWidget extends StatelessWidget {
   const WelcomeWidget({super.key, required this.animatedController});

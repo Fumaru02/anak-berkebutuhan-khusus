@@ -51,7 +51,9 @@ class WelcomeView extends StatelessWidget {
                           ? WelcomeWidget(
                               animatedController: animatedController,
                             )
-                          : LoginWidget(),
+                          : animatedController.onTapIsDaftar.isFalse
+                          ? LoginWidget(animatedController: animatedController)
+                          : Container(),
                     ),
                   ),
                 ),
