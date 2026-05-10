@@ -10,19 +10,43 @@ class WhiteWaveContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AnimatedController animatedController = Get.put(AnimatedController());
+    final AnimatedController animatedController =
+        Get.find<AnimatedController>();
     return Obx(
-      () => AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+      () => Container(
         width: SizeConfig.horizontal(animatedController.width.toDouble()),
-        height: SizeConfig.vertical(animatedController.height.toDouble()),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AssetList.wavePic),
-            fit: BoxFit.fill,
-          ),
+        constraints: BoxConstraints(
+          maxHeight: SizeConfig.vertical(70),
+          minHeight: SizeConfig.vertical(30),
         ),
-        child: child,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                height: SizeConfig.vertical(
+                  animatedController.height.toDouble(),
+                ),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AssetList.wavePic),
+                    fit: BoxFit.fill,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: child,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

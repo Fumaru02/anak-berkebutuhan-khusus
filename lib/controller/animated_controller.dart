@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:anak_berkebutuhan_khusus/utils/enums.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class AnimatedController extends GetxController {
@@ -7,6 +8,9 @@ class AnimatedController extends GetxController {
   final RxDouble width = RxDouble(100.0);
   final RxBool onTapped = RxBool(false);
   final RxBool onTapIsDaftar = RxBool(false);
+  
+  // Gunakan RxBool sebagai ganti ValueNotifier
+  final Rx<AnimState> currentState = AnimState.none.obs;
 
   void isAnimating({
     required double heightTransform,
@@ -27,20 +31,38 @@ class AnimatedController extends GetxController {
   }
 
   void toggleAnimate() {
-    onTapped.toggle();
+    final newState = currentState.value == AnimState.animate 
+        ? AnimState.none 
+        : AnimState.animate;
+    
+    currentState.value = newState;
+    
+    // Buat RxBool baru dari state saat ini
+    final RxBool isAnimatingTrigger = RxBool(newState == AnimState.animate);
+    
     isAnimating(
-      heightTransform: onTapped.value ? 60.0 : 40.0,
-      widthTransform: onTapped.value ? 200.0 : 100.0,
-      trigger: onTapped,
+      heightTransform: newState == AnimState.animate ? 60.0 : 40.0,
+      widthTransform: newState == AnimState.animate ? 200.0 : 100.0,
+      trigger: isAnimatingTrigger,
     );
+    log('State: ${currentState.value}');
   }
 
   void toggleAnimateDaftar() {
-    onTapIsDaftar.toggle();
+    final newState = currentState.value == AnimState.daftar 
+        ? AnimState.none 
+        : AnimState.daftar;
+    
+    currentState.value = newState;
+    
+    // Buat RxBool baru dari state saat ini
+    final RxBool isAnimatingTrigger = RxBool(newState == AnimState.daftar);
+    
     isAnimating(
-      heightTransform: onTapIsDaftar.value ? 80.0 : 60.0,
-      widthTransform: onTapIsDaftar.value ? 200.0 : 100.0,
-      trigger: onTapIsDaftar,
+      heightTransform: newState == AnimState.daftar ? 80.0 : 150.0,
+      widthTransform: newState == AnimState.daftar ? 200.0 : 100.0,
+      trigger: isAnimatingTrigger,
     );
+    log('State: ${currentState.value}');
   }
 }

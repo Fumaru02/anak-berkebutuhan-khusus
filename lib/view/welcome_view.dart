@@ -1,8 +1,10 @@
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
+import 'package:anak_berkebutuhan_khusus/utils/enums.dart';
 import 'package:anak_berkebutuhan_khusus/utils/frame_apps.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
+import 'package:anak_berkebutuhan_khusus/view/register_widget.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/login_widget.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/welcome_widget.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/white_wave_container.dart';
@@ -47,13 +49,22 @@ class WelcomeView extends StatelessWidget {
                   () => WhiteWaveContainer(
                     child: Padding(
                       padding: EdgeInsets.only(left: SizeConfig.horizontal(2)),
-                      child: animatedController.onTapped.isFalse
-                          ? WelcomeWidget(
+                      child: () {
+                        switch (animatedController.currentState.value) {
+                          case AnimState.animate:
+                            return LoginWidget(
                               animatedController: animatedController,
-                            )
-                          : animatedController.onTapIsDaftar.isFalse
-                          ? LoginWidget(animatedController: animatedController)
-                          : Container(),
+                            );
+                          case AnimState.daftar:
+                            return RegisterWidget(
+                              animatedController: animatedController,
+                            );
+                          case AnimState.none:
+                            return WelcomeWidget(
+                              animatedController: animatedController,
+                            );
+                        }
+                      }(),
                     ),
                   ),
                 ),

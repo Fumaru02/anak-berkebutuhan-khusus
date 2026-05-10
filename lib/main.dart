@@ -1,6 +1,5 @@
 import 'package:anak_berkebutuhan_khusus/routes/app_routes.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
-import 'package:anak_berkebutuhan_khusus/view/splash_screen.dart';
 import 'package:anak_berkebutuhan_khusus/view/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

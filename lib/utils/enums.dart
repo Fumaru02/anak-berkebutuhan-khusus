@@ -11,3 +11,5 @@ enum ScreenType { mobile, tablet, desktop }
 enum SnackbarType { error, success, info, custom }
 
 enum CalendarFormat { month, twoWeeks, week }
+
+enum AnimState { none, animate, daftar }
