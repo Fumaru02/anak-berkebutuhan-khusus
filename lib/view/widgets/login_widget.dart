@@ -4,6 +4,7 @@ import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
 import 'package:anak_berkebutuhan_khusus/utils/space_sizer.dart';
+import 'package:anak_berkebutuhan_khusus/view/frame/frame_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/blue_strip.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/custom_flatbutton.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/custom_text_field.dart';
@@ -72,7 +73,12 @@ class LoginWidget extends StatelessWidget {
                 ),
                 SpaceSizer(vertical: 4),
 
-                CustomFlatButton(text: 'Masuk', onTap: () {}),
+                CustomFlatButton(
+                  text: 'Masuk',
+                  onTap: () {
+                    Get.to(FrameView());
+                  },
+                ),
                 SpaceSizer(vertical: 1.6),
 
                 Row(

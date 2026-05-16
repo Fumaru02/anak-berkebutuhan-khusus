@@ -4,7 +4,7 @@ import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
 import 'package:anak_berkebutuhan_khusus/utils/enums.dart';
 import 'package:anak_berkebutuhan_khusus/utils/frame_apps.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
-import 'package:anak_berkebutuhan_khusus/view/register_widget.dart';
+import 'package:anak_berkebutuhan_khusus/view/widgets/register_widget.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/login_widget.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/welcome_widget.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/white_wave_container.dart';
