@@ -8,4 +8,5 @@ class AssetList {
   static String moonBtm = 'assets/icons/moon_btm.png';
   static String detectIcon = 'assets/icons/detect_icon.png';
   static String profileIcon = 'assets/icons/profile_icon.png';
+  static String kembaliIcon = 'assets/icons/kembali_icon.png';
 }

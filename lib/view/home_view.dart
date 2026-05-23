@@ -1,17 +1,22 @@
+import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
 import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
 import 'package:anak_berkebutuhan_khusus/utils/enums.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
 import 'package:anak_berkebutuhan_khusus/utils/space_sizer.dart';
+import 'package:anak_berkebutuhan_khusus/view/quisoner/quisoner_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/custom_flatbutton.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/instance_manager.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AnimatedController animatedController = Get.put(AnimatedController());
     return Stack(
       children: [
         Column(
@@ -71,7 +76,10 @@ class HomeView extends StatelessWidget {
                       SpaceSizer(vertical: 2),
                       CustomFlatButton(
                         text: 'Mulai',
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(QuisonerView());
+                          animatedController.resetAnimation();
+                        },
                         width: 45,
                         height: 4,
                         radius: 1,

@@ -15,37 +15,26 @@ class WhiteWaveContainer extends StatelessWidget {
     return Obx(
       () => Container(
         width: SizeConfig.horizontal(animatedController.width.toDouble()),
-        constraints: BoxConstraints(
-          maxHeight: SizeConfig.vertical(70),
-          minHeight: SizeConfig.vertical(30),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                height: SizeConfig.vertical(
-                  animatedController.height.toDouble(),
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AssetList.wavePic),
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: child,
-                ),
-              ),
+        // Hapus constraints atau sesuaikan
+        child: AnimatedContainer(
+          // Langsung AnimatedContainer, tanpa Flexible
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          height: SizeConfig.vertical(animatedController.height.toDouble()),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AssetList.wavePic),
+              fit: BoxFit.fill,
             ),
-          ],
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: child,
+          ),
         ),
       ),
     );
