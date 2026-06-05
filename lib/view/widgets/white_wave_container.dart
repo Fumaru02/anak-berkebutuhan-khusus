@@ -6,7 +6,14 @@ import 'package:get/get.dart';
 
 class WhiteWaveContainer extends StatelessWidget {
   final Widget child;
-  const WhiteWaveContainer({super.key, required this.child});
+  final double? height;
+  final double? width;
+  const WhiteWaveContainer({
+    super.key,
+    required this.child,
+    this.height,
+    this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +21,17 @@ class WhiteWaveContainer extends StatelessWidget {
         Get.find<AnimatedController>();
     return Obx(
       () => Container(
-        width: SizeConfig.horizontal(animatedController.width.toDouble()),
+        width: SizeConfig.horizontal(
+          height ?? animatedController.width.toDouble(),
+        ),
         // Hapus constraints atau sesuaikan
         child: AnimatedContainer(
           // Langsung AnimatedContainer, tanpa Flexible
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
-          height: SizeConfig.vertical(animatedController.height.toDouble()),
+          height: SizeConfig.vertical(
+            width ?? animatedController.height.toDouble(),
+          ),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(AssetList.wavePic),

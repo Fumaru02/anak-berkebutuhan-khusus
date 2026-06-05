@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:anak_berkebutuhan_khusus/helper/ontap_identifier.dart';
 import 'package:anak_berkebutuhan_khusus/view/home_view.dart';
+import 'package:anak_berkebutuhan_khusus/view/profile_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -208,6 +209,9 @@ class FrameController extends GetxController {
 
   List<Widget> widgetViewList = <Widget>[
     const HomeView(),
+    const HomeView(),
+    const HomeView(),
+    const ProfileView(),
     // const ScanView(),
     // const HistoryView(),
     // const ProfileView(),

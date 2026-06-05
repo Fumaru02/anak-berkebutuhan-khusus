@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:anak_berkebutuhan_khusus/utils/enums.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AnimatedController extends GetxController {
@@ -11,6 +11,31 @@ class AnimatedController extends GetxController {
 
   // Gunakan RxBool sebagai ganti ValueNotifier
   final Rx<AnimState> currentState = AnimState.none.obs;
+
+ late PageController pageViewController;
+  var currentPageIndex = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    pageViewController = PageController();
+  }
+
+  @override
+  void onClose() {
+    pageViewController.dispose();
+    super.onClose();
+  }
+
+  void updateCurrentPageIndex(int index) {
+    pageViewController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    currentPageIndex.value = index;
+  }
+
 
   void resetAnimation() {
     height.value = 40.0;
