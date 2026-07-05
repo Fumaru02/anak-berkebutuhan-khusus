@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "941246397394",
+    "project_id": "anak-berkebutuhan-khusus",
+    "storage_bucket": "anak-berkebutuhan-khusus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941246397394:android:f5aff49e44a188885fa60b",
+        "android_client_info": {
+          "package_name": "com.example.anak_berkebutuhan_khusus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmT98yPI5MwVYJCr2Pd_spt1fxgD3lJ9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

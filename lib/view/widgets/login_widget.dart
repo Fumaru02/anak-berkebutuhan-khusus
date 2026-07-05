@@ -40,12 +40,17 @@ class LoginWidget extends StatelessWidget {
                   title: 'Email',
                   hintText: 'enter your email',
                   prefixIcon: Icon(Icons.email_outlined),
+                  controller: loginViewController.emailController,
                 ),
                 CustomTextField(
                   title: 'Kata sandi',
                   hintText: 'enter your password',
                   prefixIcon: Icon(Icons.lock_outline),
+                  passwordController: loginViewController.passwordController,
+                  isPasswordField: true,
                 ),
+                SpaceSizer(vertical: 1),
+
                 Padding(
                   padding: EdgeInsets.only(left: SizeConfig.horizontal(4)),
                   child: Row(
@@ -75,8 +80,8 @@ class LoginWidget extends StatelessWidget {
 
                 CustomFlatButton(
                   text: 'Masuk',
-                  onTap: () {
-                    Get.to(FrameView());
+                  onTap: () async {
+                    await loginViewController.signInWithEmailAndPassword();
                   },
                 ),
                 SpaceSizer(vertical: 1.6),

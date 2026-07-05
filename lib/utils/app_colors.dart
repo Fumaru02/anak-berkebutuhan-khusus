@@ -23,6 +23,7 @@ class AppColors {
   static Color grey = AppColors.hex(colorCode: '#B5C0D0');
   static Color greySmooth = AppColors.hex(colorCode: '#D8D9DA');
   static Color orangeActive = AppColors.hex(colorCode: '#D37116');
+  static Color greenColor = AppColors.hex(colorCode: '#A5CF83');
   //primary
   static Color maroon = AppColors.hex(colorCode: '#3FA2F6');
   static Color blueTransparent = AppColors.hex(colorCode: '#CAF4FF');

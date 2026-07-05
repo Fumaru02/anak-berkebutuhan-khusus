@@ -1,4 +1,5 @@
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
+import 'package:anak_berkebutuhan_khusus/controller/quisoner_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
 import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
@@ -11,9 +12,14 @@ import 'package:anak_berkebutuhan_khusus/view/widgets/ripple_button.dart';
 import 'package:flutter/material.dart';
 
 class QuisonerWelcome extends StatelessWidget {
-  const QuisonerWelcome({super.key, required this.animatedController});
+  const QuisonerWelcome({
+    super.key,
+    required this.animatedController,
+    required this.quisonerController,
+  });
 
   final AnimatedController animatedController;
+  final QuisonerController quisonerController;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,10 @@ class QuisonerWelcome extends StatelessWidget {
           SpaceSizer(vertical: 5),
           CustomFlatButton(
             text: 'Mulai',
-            onTap: () => animatedController.toggleAnimateQuisoner(),
+            onTap: () async {
+              await quisonerController.getQuisoners();
+              animatedController.toggleAnimateQuisoner();
+            },
           ),
         ],
       ),

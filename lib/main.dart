@@ -1,6 +1,7 @@
 import 'package:anak_berkebutuhan_khusus/routes/app_routes.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
 import 'package:anak_berkebutuhan_khusus/view/welcome_view.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // // Menginisialisasi Firebase.
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
   // // Mengatur orientasi layar yang diinginkan.
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[

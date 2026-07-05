@@ -120,13 +120,8 @@ class CustomTextField extends StatelessWidget {
                         ),
                         fillColor: AppColors.whiteColor,
                         filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              SizeConfig.horizontal(borderRadius ?? 4),
-                            ),
-                          ),
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.greyDisabled),
                         ),
                         labelText: hintText,
                         floatingLabelBehavior: FloatingLabelBehavior.never,

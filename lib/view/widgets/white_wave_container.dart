@@ -20,7 +20,7 @@ class WhiteWaveContainer extends StatelessWidget {
     final AnimatedController animatedController =
         Get.find<AnimatedController>();
     return Obx(
-      () => Container(
+      () => SizedBox(
         width: SizeConfig.horizontal(
           height ?? animatedController.width.toDouble(),
         ),
@@ -43,7 +43,7 @@ class WhiteWaveContainer extends StatelessWidget {
             ),
           ),
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             child: child,
           ),
         ),

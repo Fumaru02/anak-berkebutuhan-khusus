@@ -49,14 +49,24 @@ class ProfileView extends StatelessWidget {
             ),
             Column(
               children: [
-                Spacer(),
-                WhiteWaveContainer(
-                  height: SizeConfig.horizontal(180),
-                  width: SizeConfig.horizontal(20),
+                Container(
+                  color: AppColors.whiteColor,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SpaceSizer(vertical: 7),
+                      SpaceSizer(vertical: 5),
+
+                      Center(
+                        child: Container(
+                          width: SizeConfig.horizontal(40),
+                          height: SizeConfig.horizontal(40),
+                          decoration: BoxDecoration(
+                            color: AppColors.blackColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      SpaceSizer(vertical: 3),
                       RubikTextView(
                         value: 'Profile',
                         fontWeight: FontWeight.w500,
@@ -64,20 +74,25 @@ class ProfileView extends StatelessWidget {
                         color: AppColors.blackColor,
                       ),
                       BlueStrip(),
-                      SpaceSizer(vertical: 5),
+                      SpaceSizer(vertical: 2),
                       Center(
                         child: Column(
                           children: [
-                            
                             CustomTextField(
-                              title: 'Nomer Telphone',
+                              title: 'Email',
                               hintText: 'enter your email',
                               prefixIcon: Icon(Icons.email_outlined),
                             ),
                             CustomTextField(
-                              title: 'Nomer Telephone',
+                              title: 'Nomor Telphone',
                               hintText: 'enter your phone number',
                               prefixIcon: Icon(Icons.phone_android),
+                            ),
+                            RubikTextView(
+                              value: 'Ganti Kata Sandi?',
+                              fontWeight: FontWeight.w500,
+                              size: SizeConfig.safeBlockHorizontal * 5,
+                              color: AppColors.blackColor,
                             ),
                             CustomTextField(
                               title: 'Kata sandi',
@@ -89,26 +104,21 @@ class ProfileView extends StatelessWidget {
                               hintText: 'Confirm your password',
                               prefixIcon: Icon(Icons.lock_outline),
                             ),
-                            SpaceSizer(vertical: 2),
-
-                            CustomFlatButton(text: 'Masuk', onTap: () {}),
                             SpaceSizer(vertical: 1),
 
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RubikTextView(
-                                  value: 'Sudah memiliki akun?',
-                                  size: SizeConfig.safeBlockHorizontal * 3,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.blackColor,
-                                ),
-                                SpaceSizer(horizontal: 1),
-
-                                SpaceSizer(horizontal: 4),
-                              ],
+                            CustomFlatButton(
+                              text: 'Ganti Kata sandi',
+                              onTap: () {},
                             ),
+                            SpaceSizer(vertical: 1),
+
+                            RubikTextView(
+                              value: 'Keluar?',
+                              size: SizeConfig.safeBlockHorizontal * 4,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.blackColor,
+                            ),
+                            SpaceSizer(vertical: 8),
                           ],
                         ),
                       ),

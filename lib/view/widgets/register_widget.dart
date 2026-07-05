@@ -1,5 +1,6 @@
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
 import 'package:anak_berkebutuhan_khusus/controller/login_view_controller.dart';
+import 'package:anak_berkebutuhan_khusus/controller/register_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
@@ -19,8 +20,8 @@ class RegisterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: LoginViewController(),
-      builder: (loginViewController) => Column(
+      init: RegisterController(),
+      builder: (registerController) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SpaceSizer(vertical: 7),
@@ -36,28 +37,47 @@ class RegisterWidget extends StatelessWidget {
             child: Column(
               children: [
                 CustomTextField(
+                  title: 'Nama',
+                  hintText: 'enter your name',
+                  prefixIcon: Icon(Icons.person),
+                  controller: registerController.nameController,
+                ),
+                CustomTextField(
                   title: 'Email',
                   hintText: 'enter your email',
                   prefixIcon: Icon(Icons.email_outlined),
+                  controller: registerController.emailController,
                 ),
                 CustomTextField(
-                  title: 'Nomer Telephone',
+                  title: 'Nomer Telphone',
                   hintText: 'enter your phone number',
                   prefixIcon: Icon(Icons.phone_android),
+                  controller: registerController.noHPController,
                 ),
                 CustomTextField(
+                  isPasswordField: true,
                   title: 'Kata sandi',
                   hintText: 'enter your password',
                   prefixIcon: Icon(Icons.lock_outline),
+                  passwordController: registerController.passwordController,
                 ),
                 CustomTextField(
+                  isPasswordField: true,
                   title: 'Konfirmasi Kata sandi',
                   hintText: 'Confirm your password',
                   prefixIcon: Icon(Icons.lock_outline),
+                  passwordController:
+                      registerController.confirmPasswordController,
                 ),
                 SpaceSizer(vertical: 2),
 
-                CustomFlatButton(text: 'Masuk', onTap: () {}),
+                CustomFlatButton(
+                  text: 'Daftar',
+                  onTap: () async {
+                    await registerController.signUpWithEmailAndPassword();
+                    animatedController.toggleAnimate();
+                  },
+                ),
                 SpaceSizer(vertical: 1),
 
                 Row(

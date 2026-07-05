@@ -2,9 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:anak_berkebutuhan_khusus/helper/ontap_identifier.dart';
+import 'package:anak_berkebutuhan_khusus/models/educations/education_model.dart';
+import 'package:anak_berkebutuhan_khusus/view/history_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/home_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/profile_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/login_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -16,7 +20,7 @@ class FrameController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isEdit = false.obs;
   // User? user;
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   // final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   TextEditingController usernameChange = TextEditingController();
   TextEditingController noHPChange = TextEditingController();
@@ -28,9 +32,11 @@ class FrameController extends GetxController {
   RxString userName = RxString('');
   RxString userImage = RxString('');
   RxString phoneNumber = RxString('');
-  // RxList<ScanHistory> historyList = RxList<ScanHistory>(<ScanHistory>[]);
+  RxList<EducationModel> educationsList = RxList<EducationModel>(
+    <EducationModel>[],
+  );
   RxString userEmail = RxString('');
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // final User? user = FirebaseAuth.instance.currentUser;
   RxList<OnTapIdentifier> onTapIdentifierList =
       RxList<OnTapIdentifier>(<OnTapIdentifier>[
@@ -41,8 +47,8 @@ class FrameController extends GetxController {
       ]);
   @override
   void onInit() async {
-    // await getDataUser();
-    // getHistory(userName.value);
+    await getEducations();
+    await getDataUser();
     super.onInit();
   }
 
@@ -68,21 +74,44 @@ class FrameController extends GetxController {
     }
   }
 
-  // dynamic getDataUser() async {
-  //   isLoading.value = true;
-  //   await _firestore.collection('users').doc(_auth.currentUser!.uid).get().then(
-  //     (DocumentSnapshot<dynamic> documentSnapshot) {
-  //       userName.value = documentSnapshot.data()['username'] as String;
-  //       phoneNumber.value = documentSnapshot.data()['no_hp'] as String;
-  //       userEmail.value = documentSnapshot.data()['email'] as String;
-  //       userImage.value = documentSnapshot.data()['user_image'] as String;
-  //       log(documentSnapshot.toString());
-  //       update();
-  //     },
-  //   );
+  dynamic getDataUser() async {
+    isLoading.value = true;
+    await _firestore.collection('users').doc(_auth.currentUser!.uid).get().then(
+      (DocumentSnapshot<dynamic> documentSnapshot) {
+        userName.value = documentSnapshot.data()['username'] as String;
+        phoneNumber.value = documentSnapshot.data()['no_hp'] as String;
+        userEmail.value = documentSnapshot.data()['email'] as String;
+        userImage.value = documentSnapshot.data()['user_image'] as String;
+        log(documentSnapshot.toString());
+        update();
+      },
+    );
 
-  //   isLoading.value = false;
-  // }
+    isLoading.value = false;
+  }
+
+  Future<void> getEducations() async {
+    isLoading.value = true;
+
+    try {
+      await _firestore.collection('home').doc('educations').get().then((
+        DocumentSnapshot<dynamic> documentSnapshot,
+      ) {
+        final Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic> educationsData =
+            data['education_list'] as List<dynamic>;
+        educationsList.value = educationsData
+            .map(
+              (dynamic e) => EducationModel.fromJson(e as Map<String, dynamic>),
+            )
+            .toList();
+        isLoading.value = false;
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 
   // Future<bool> updateData({
   //   String? username,
@@ -209,7 +238,7 @@ class FrameController extends GetxController {
 
   List<Widget> widgetViewList = <Widget>[
     const HomeView(),
-    const HomeView(),
+    HistoryView(),
     const HomeView(),
     const ProfileView(),
     // const ScanView(),

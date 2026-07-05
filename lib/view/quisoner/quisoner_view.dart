@@ -1,4 +1,5 @@
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
+import 'package:anak_berkebutuhan_khusus/controller/quisoner_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
 import 'package:anak_berkebutuhan_khusus/utils/enums.dart';
@@ -20,6 +21,7 @@ class QuisonerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AnimatedController animatedController = Get.put(AnimatedController());
+    final QuisonerController quisonerController = Get.put(QuisonerController());
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.black,
@@ -56,9 +58,11 @@ class QuisonerView extends StatelessWidget {
                           case AnimState.daftar:
                             return Quisoner(
                               animatedController: animatedController,
+                              quisonerController: quisonerController,
                             );
                           case AnimState.none:
                             return QuisonerWelcome(
+                              quisonerController: quisonerController,
                               animatedController: animatedController,
                             );
                         }
