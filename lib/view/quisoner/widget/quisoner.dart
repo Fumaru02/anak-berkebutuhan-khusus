@@ -27,60 +27,83 @@ class Quisoner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SpaceSizer(vertical: 5),
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SpaceSizer(vertical: 5),
 
-        RippleButton(
-          onTap: () => Get.back(),
-          child: Image.asset(
-            AssetList.kembaliIcon,
-            width: SizeConfig.horizontal(30),
-            height: SizeConfig.horizontal(10),
-          ),
-        ),
-        RubikTextView(
-          value: 'Quisoner',
-          fontWeight: FontWeight.w500,
-          size: SizeConfig.safeBlockHorizontal * 10,
-          color: AppColors.blackColor,
-        ),
-        BlueStrip(),
-        SpaceSizer(vertical: 1),
-        Container(
-          color: AppColors.blueColor,
-          width: SizeConfig.horizontal(96),
-          child: Center(
-            child: RubikTextView(
-              value: 'ADHD',
-              fontWeight: FontWeight.w500,
-              size: SizeConfig.safeBlockHorizontal * 5,
-              color: AppColors.whiteColor,
+          RippleButton(
+            onTap: () => Get.back(),
+            child: Image.asset(
+              AssetList.kembaliIcon,
+              width: SizeConfig.horizontal(30),
+              height: SizeConfig.horizontal(10),
             ),
           ),
-        ),
-        SizedBox(
-          width: SizeConfig.horizontal(100),
-          height: SizeConfig.screenHeight,
-          child: PageView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            controller: quisonerController.pageController,
-            itemCount: quisonerController.quisonerList.length,
-            onPageChanged: (index) {
-              quisonerController.currentPage.value = index;
-              log('pagechanged ${index}');
-            },
-            itemBuilder: (context, index) => QuisonerPart(
-              quisonerModel: quisonerController.quisonerList[index],
-              animatedController: animatedController,
-            ),
-
-            // IndicationPart(animatedController: animatedController),
-            // RatePart(animatedController: animatedController),
+          RubikTextView(
+            value: quisonerController.currentPage.value == 45
+                ? 'Indikasi'
+                : 'Quisoner',
+            fontWeight: FontWeight.w500,
+            size: SizeConfig.safeBlockHorizontal * 10,
+            color: AppColors.blackColor,
           ),
-        ),
-      ],
+          BlueStrip(),
+          SpaceSizer(vertical: 1),
+          quisonerController.currentPage.value == 45
+              ? SizedBox()
+              : Container(
+                  color: AppColors.blueColor,
+                  width: SizeConfig.horizontal(96),
+                  child: Center(
+                    child: Obx(
+                      () => RubikTextView(
+                        value: quisonerController.currentPage.value < 12
+                            ? 'ADHD'
+                            : quisonerController.currentPage.value < 25
+                            ? 'ASD'
+                            : quisonerController.currentPage.value < 35
+                            ? 'DISLEKSIA'
+                            : quisonerController.currentPage.value < 45
+                            ? 'TUNAGRAHITA'
+                            : '',
+                        fontWeight: FontWeight.w500,
+                        size: SizeConfig.safeBlockHorizontal * 5,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ),
+          SizedBox(
+            width: SizeConfig.horizontal(100),
+            height: SizeConfig.screenHeight,
+            child: PageView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              controller: quisonerController.pageController,
+              itemCount: quisonerController.quisonerList.length,
+              onPageChanged: (index) {
+                quisonerController.currentPage.value = index;
+                log('pagechanged ${index}');
+              },
+              itemBuilder: (context, index) => Obx(
+                () => quisonerController.currentPage.value == 45
+                    ? IndicationPart(
+                        animatedController: animatedController,
+                        quisonerController: quisonerController,
+                      )
+                    : QuisonerPart(
+                        quisonerModel: quisonerController.quisonerList[index],
+                        animatedController: animatedController,
+                      ),
+              ),
+
+              // IndicationPart(animatedController: animatedController),
+              // RatePart(animatedController: animatedController),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -116,7 +139,6 @@ class RatePart extends StatelessWidget {
         Center(
           child: Column(
             children: [
-              GreyContainer(),
               SpaceSizer(vertical: 22),
 
               CustomFlatButton(
@@ -133,50 +155,116 @@ class RatePart extends StatelessWidget {
 }
 
 class IndicationPart extends StatelessWidget {
-  const IndicationPart({super.key, required this.animatedController});
+  const IndicationPart({
+    super.key,
+    required this.animatedController,
+    required this.quisonerController,
+  });
 
   final AnimatedController animatedController;
+  final QuisonerController quisonerController;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SpaceSizer(vertical: 12),
-
-        SpaceSizer(vertical: 1),
         RubikTextView(
-          value: 'Indikasi',
-          fontWeight: FontWeight.w500,
-          size: SizeConfig.safeBlockHorizontal * 10,
-          color: AppColors.blackColor,
-        ),
-        BlueStrip(),
-
-        SpaceSizer(vertical: 1),
-        RubikTextView(
-          value:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry?',
+          value: 'Hasil akhir semua gangguan',
           fontWeight: FontWeight.w500,
           size: SizeConfig.safeBlockHorizontal * 5,
           color: AppColors.blackColor,
         ),
-        SpaceSizer(vertical: 5),
+        SpaceSizer(vertical: 1),
         Center(
           child: Column(
             children: [
-              GreyContainer(),
-              SpaceSizer(vertical: 2),
-
-              GreyContainer(),
-              SpaceSizer(vertical: 4),
-
-              CustomFlatButton(
-                text: 'Finish',
-                onTap: () => animatedController.toggleAnimateQuisoner(),
+              PersentageContainer(
+                title: 'ADHD',
+                persentase: quisonerController.finalScoreADHD.value,
+                colorContainer: AppColors.blackColor,
               ),
               SpaceSizer(vertical: 1),
+              PersentageContainer(
+                title: 'ASD',
+                persentase: quisonerController.finalScoreASD.value,
+
+                colorContainer: AppColors.blackColor,
+              ),
+              SpaceSizer(vertical: 1),
+
+              PersentageContainer(
+                title: 'DISLEKSIA',
+                persentase: quisonerController.finalScoreDISLEKSIA.value,
+                colorContainer: AppColors.blackColor,
+              ),
+              SpaceSizer(vertical: 1),
+
+              PersentageContainer(
+                title: 'TUNAGRAHITA',
+                persentase: quisonerController.finalScoreTUNAGRAHITA.value,
+                colorContainer: AppColors.blackColor,
+              ),
             ],
+          ),
+        ),
+        SpaceSizer(vertical: 1),
+        RubikTextView(
+          value: 'Urutan paling dominan',
+          fontWeight: FontWeight.w500,
+          size: SizeConfig.safeBlockHorizontal * 5,
+          color: AppColors.blackColor,
+        ),
+        SpaceSizer(vertical: 1),
+
+        Obx(() {
+          List<Map<String, dynamic>> data = [
+            {'title': 'ADHD', 'value': quisonerController.finalScoreADHD.value},
+            {'title': 'ASD', 'value': quisonerController.finalScoreASD.value},
+            {
+              'title': 'DISLEKSIA',
+              'value': quisonerController.finalScoreDISLEKSIA.value,
+            },
+            {
+              'title': 'TUNAGRAHITA',
+              'value': quisonerController.finalScoreTUNAGRAHITA.value,
+            },
+          ];
+
+          // Debug: print sebelum sorting
+          print('Sebelum sorting: $data');
+
+          // Sorting descending
+          data.sort((a, b) => b['value'].compareTo(a['value']));
+
+          // Debug: print setelah sorting
+          print('Setelah sorting: $data');
+
+          return Column(
+            children: data.map((item) {
+              return Column(
+                children: [
+                  PersentageContainer(
+                    title: item['title'],
+                    persentase: item['value'],
+                    colorContainer: AppColors.blackColor,
+                  ),
+                  SpaceSizer(vertical: 1),
+                ],
+              );
+            }).toList(),
+          );
+        }),
+        SpaceSizer(vertical: 3),
+
+        Obx(
+          () => CustomFlatButton(
+            loading: quisonerController.isLoading.value,
+            width: 96,
+            text: 'Selesai',
+            onTap: () async {
+              await quisonerController.uploadScoreHistory();
+            },
           ),
         ),
       ],
@@ -184,28 +272,44 @@ class IndicationPart extends StatelessWidget {
   }
 }
 
-class GreyContainer extends StatelessWidget {
-  const GreyContainer({super.key});
+class PersentageContainer extends StatelessWidget {
+  const PersentageContainer({
+    super.key,
+    required this.title,
+    required this.colorContainer,
+    required this.persentase,
+  });
+
+  final String title;
+  final Color colorContainer;
+  final double persentase;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.greyCard,
-        borderRadius: BorderRadius.all(
-          Radius.circular(SizeConfig.horizontal(2)),
+    return Stack(
+      children: [
+        Container(
+          width: SizeConfig.horizontal(95),
+          height: SizeConfig.vertical(4),
+          color: colorContainer,
         ),
-        border: Border.all(color: AppColors.blackColor),
-      ),
-      width: SizeConfig.horizontal(90),
-      height: SizeConfig.horizontal(35),
-      child: RubikTextView(
-        value:
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry?',
-        fontWeight: FontWeight.w500,
-        size: SizeConfig.safeBlockHorizontal * 4,
-        color: AppColors.blackColor,
-      ),
+        Container(
+          width: SizeConfig.horizontal(95 * (persentase / 100)),
+          height: SizeConfig.vertical(4),
+          color: AppColors.maroon,
+        ),
+        Center(
+          child: Column(
+            children: [
+              SpaceSizer(vertical: 1),
+              RubikTextView(
+                value: '$title $persentase%',
+                size: SizeConfig.safeBlockHorizontal * 3.5,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -317,15 +421,31 @@ class QuisonerPart extends StatelessWidget {
                 ),
                 SpaceSizer(vertical: 2),
 
-                CustomFlatButton(
-                  text: 'Selanjutnya',
-                  onTap: () {
-                    quisonerController.saveAllAnswers(approvement.length);
-                    log(
-                      quisonerController.selectedAnswerADHD.length.toString(),
-                    );
-                  },
-                ),
+                quisonerController.selectedIndex.value == -1
+                    ? SizedBox()
+                    : CustomFlatButton(
+                        text: quisonerController.currentPage.value <= 44
+                            ? 'Selanjutnya'
+                            : 'Selesai',
+                        onTap: () {
+                          quisonerController.saveAllAnswers(approvement.length);
+                          log(
+                            quisonerController.selectedAnswerADHD.length
+                                .toString(),
+                          );
+                          switch (quisonerController.currentPage.value) {
+                            case 12:
+                            case 25:
+                            case 35:
+                            case 45:
+                              quisonerController.collectiongScore();
+                              break;
+                            case 44:
+                              // Kosong, tidak melakukan apa-apa
+                              break;
+                          }
+                        },
+                      ),
                 SpaceSizer(vertical: 1),
               ],
             ),

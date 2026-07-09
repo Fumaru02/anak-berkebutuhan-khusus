@@ -1,4 +1,5 @@
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
+import 'package:anak_berkebutuhan_khusus/controller/frame_controller.dart';
 import 'package:anak_berkebutuhan_khusus/controller/quisoner_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
@@ -10,6 +11,8 @@ import 'package:anak_berkebutuhan_khusus/view/widgets/blue_strip.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/custom_flatbutton.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/ripple_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class QuisonerWelcome extends StatelessWidget {
   const QuisonerWelcome({
@@ -23,6 +26,7 @@ class QuisonerWelcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FrameController frameController = Get.put(FrameController());
     return SizedBox(
       width: SizeConfig.screenWidth,
       child: Column(
@@ -43,6 +47,8 @@ class QuisonerWelcome extends StatelessWidget {
           CustomFlatButton(
             text: 'Mulai',
             onTap: () async {
+              quisonerController.username.value =
+                  frameController.userName.value;
               await quisonerController.getQuisoners();
               animatedController.toggleAnimateQuisoner();
             },

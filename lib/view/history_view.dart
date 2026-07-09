@@ -101,13 +101,7 @@ class IndicationPartHistory extends StatelessWidget {
           SpaceSizer(vertical: 5),
           Center(
             child: Column(
-              children: [
-                GreyContainer(),
-                SpaceSizer(vertical: 2),
-
-                GreyContainer(),
-                SpaceSizer(vertical: 4),
-              ],
+              children: [SpaceSizer(vertical: 2), SpaceSizer(vertical: 4)],
             ),
           ),
         ],
