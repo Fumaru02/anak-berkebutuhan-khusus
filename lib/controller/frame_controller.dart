@@ -2,10 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:anak_berkebutuhan_khusus/helper/ontap_identifier.dart';
-import 'package:anak_berkebutuhan_khusus/models/educations/education_model.dart';
+import 'package:anak_berkebutuhan_khusus/models/education_model.dart';
+import 'package:anak_berkebutuhan_khusus/models/history_model.dart';
 import 'package:anak_berkebutuhan_khusus/view/history_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/home_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/profile_view.dart';
+import 'package:anak_berkebutuhan_khusus/view/quisoner/quisoner_view.dart';
+import 'package:anak_berkebutuhan_khusus/view/welcome_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/login_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,10 +34,14 @@ class FrameController extends GetxController {
   File? image;
   RxString userName = RxString('');
   RxString userImage = RxString('');
+  final RxString errorMessage = ''.obs;
   RxString phoneNumber = RxString('');
   RxList<EducationModel> educationsList = RxList<EducationModel>(
     <EducationModel>[],
   );
+  final TextEditingController passwordController = TextEditingController();
+
+  RxList<HistoryModel> historyList = RxList<HistoryModel>(<HistoryModel>[]);
   RxString userEmail = RxString('');
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // final User? user = FirebaseAuth.instance.currentUser;
@@ -43,20 +50,18 @@ class FrameController extends GetxController {
         OnTapIdentifier(name: '', index: 0, isOnTapped: true),
         OnTapIdentifier(name: '', index: 1, isOnTapped: false),
         OnTapIdentifier(name: '', index: 2, isOnTapped: false),
-        OnTapIdentifier(name: '', index: 3, isOnTapped: false),
       ]);
   @override
   void onInit() async {
     await getEducations();
     await getDataUser();
+    await getHistory(userName.value);
     super.onInit();
   }
 
   Future<void> signOut() async {
-    // await GoogleSignIn().disconnect();
-    // await GoogleSignIn().signOut();
-    // await FirebaseAuth.instance.signOut();
-    // Get.offAll( LoginWidget());
+    await FirebaseAuth.instance.signOut();
+    Get.offAll(WelcomeView());
   }
 
   String getGreeting() {
@@ -113,55 +118,67 @@ class FrameController extends GetxController {
     }
   }
 
-  // Future<bool> updateData({
-  //   String? username,
-  //   String? noHP,
-  //   String? email,
-  // }) async {
-  //   try {
-  //     final user = FirebaseAuth.instance.currentUser;
-  //     if (user == null) {
-  //       throw Exception("User not authenticated");
-  //     }
+  Future<void> getHistory([String? userUsername]) async {
+    final String targetUsername = userUsername ?? userName.value;
 
-  //     Map<String, dynamic> updateData = {};
-  //     bool hasChanges = false;
+    if (targetUsername.isEmpty) {
+      errorMessage.value = 'Username tidak ditemukan';
+      isLoading.value = false;
+      return;
+    }
 
-  //     // Only update username if provided and different
-  //     if (username != null && userName.value != username) {
-  //       userName.value = username;
-  //       updateData['username'] = username;
-  //       hasChanges = true;
-  //     }
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
 
-  //     // Only update phone number if provided and different
-  //     if (noHP != null && phoneNumber.value != noHP) {
-  //       phoneNumber.value = noHP;
-  //       updateData['no_hp'] = noHP;
-  //       hasChanges = true;
-  //     }
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore.collection('history').doc(targetUsername).get();
 
-  //     // Only update email if provided and different
-  //     if (email != null && userEmail.value != email) {
-  //       userEmail.value = email;
-  //       updateData['email'] = email;
-  //       hasChanges = true;
-  //     }
+      if (documentSnapshot.exists) {
+        final Map<String, dynamic>? data = documentSnapshot.data();
 
-  //     if (hasChanges) {
-  //       await FirebaseFirestore.instance
-  //           .collection('users')
-  //           .doc(user.uid)
-  //           .update(updateData);
-  //     }
-  //     isEdit.value = !isEdit.value;
+        if (data != null && data.containsKey('quisoner_history')) {
+          final List<dynamic> historyData =
+              data['quisoner_history'] as List<dynamic>;
 
-  //     return true;
-  //   } catch (e) {
-  //     log("Error updating user data: $e");
-  //     rethrow;
-  //   }
-  // }
+          if (historyData.isNotEmpty) {
+            // Konversi ke model
+            historyList.value = historyData
+                .map((e) => HistoryModel.fromJson(e as Map<String, dynamic>))
+                .toList();
+
+            // Sort berdasarkan timestamp (terbaru di atas)
+            // historyList.sort((a, b) {
+            //   // Gunakan timestamp jika ada, fallback ke createdAt
+            //   final aTime = a.timestamp ?? 0;
+            //   final bTime = b.timestamp ?? 0;
+            //   return bTime.compareTo(aTime);
+            // });
+
+            print('✅ Berhasil mengambil ${historyList.length} data history');
+          } else {
+            historyList.clear();
+            print('📭 Data history kosong');
+          }
+        } else {
+          historyList.clear();
+          errorMessage.value = 'Data history tidak ditemukan';
+        }
+      } else {
+        historyList.clear();
+        errorMessage.value =
+            'Dokumen tidak ditemukan untuk user: $targetUsername';
+        print('❌ Dokumen tidak ditemukan');
+      }
+    } catch (e) {
+      errorMessage.value = 'Gagal mengambil data: ${e.toString()}';
+      historyList.clear();
+      print('❌ Error: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+      update(); // Trigger UI update
+    }
+  }
 
   // Future<dynamic> pickImage(ImageSource source) async {
   //   try {
@@ -239,7 +256,6 @@ class FrameController extends GetxController {
   List<Widget> widgetViewList = <Widget>[
     const HomeView(),
     HistoryView(),
-    const HomeView(),
     const ProfileView(),
     // const ScanView(),
     // const HistoryView(),
@@ -256,5 +272,66 @@ class FrameController extends GetxController {
         onTapIdentifierList[element.index].isOnTapped = false;
       }
     }
+  }
+
+  Future<void> changePassword(String newPassword) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      // Get current user (nullable)
+      final User? user = _auth.currentUser;
+
+      // Check if user is logged in
+      if (user == null) {
+        throw Exception('No user logged in');
+      }
+
+      // Update password
+      await user.updatePassword(newPassword);
+
+      // Success
+      Get.snackbar(
+        'Success',
+        'Password changed successfully',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      // Handle specific errors
+      String message = _handleFirebaseError(e);
+      errorMessage.value = message;
+
+      Get.snackbar(
+        'Error',
+        message,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+
+      print('Password change error: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  String _handleFirebaseError(dynamic error) {
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'requires-recent-login':
+          return 'Please re-authenticate before changing password';
+        case 'weak-password':
+          return 'Password is too weak. Use at least 6 characters';
+        case 'user-not-found':
+          return 'User not found';
+        case 'wrong-password':
+          return 'Current password is incorrect';
+        default:
+          return error.message ?? 'Failed to change password';
+      }
+    }
+    return error.toString();
   }
 }

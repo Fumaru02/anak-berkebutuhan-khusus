@@ -1,5 +1,5 @@
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
-import 'package:anak_berkebutuhan_khusus/models/educations/education_model.dart';
+import 'package:anak_berkebutuhan_khusus/models/education_model.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
 import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';

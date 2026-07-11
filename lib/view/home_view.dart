@@ -12,205 +12,555 @@ import 'package:anak_berkebutuhan_khusus/view/widgets/custom_flatbutton.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/ripple_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AnimatedController animatedController = Get.put(AnimatedController());
-    FrameController frameController = Get.put(FrameController());
-    return Stack(
-      children: [
-        Column(
+    final AnimatedController animatedController = Get.put(AnimatedController());
+    final FrameController frameController = Get.put(FrameController());
+
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.black,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.blueColor,
+        body: Stack(
           children: [
-            SpaceSizer(vertical: 6),
-            Row(
-              children: [
-                SpaceSizer(horizontal: 10),
-                Image.asset(AssetList.moonIcon),
-              ],
+            // Background dengan gradient
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.blueColor,
+                    AppColors.blueColor.withOpacity(0.8),
+                    Colors.white,
+                  ],
+                  stops: [0.0, 0.3, 0.7],
+                ),
+              ),
             ),
-          ],
-        ),
-        SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.horizontal(6)),
-            child: Obx(
-              () => Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.blackColor.withAlpha(50),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(SizeConfig.horizontal(3)),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(SizeConfig.horizontal(2)),
-                          child: RubikTextView(
-                            value: frameController.userName.value,
-                            color: AppColors.whiteColor,
-                            fontWeight: FontWeight.w600,
-                            size: SizeConfig.safeBlockHorizontal * 6.5,
-                          ),
-                        ),
-                      ),
-                      // Obx(
-                      //   () => frameController.isLoading.isTrue
-                      //       ? const Center(child: CircularProgressIndicator())
-                      //       : frameController.userImage.value == ''
-                      //       ? CircleAvatar(
-                      //           minRadius: 30,
-                      //           child: Icon(
-                      //             Icons.person_2_rounded,
-                      //             size: SizeConfig.horizontal(10),
-                      //           ),
-                      //         )
-                      //       : Container(
-                      //           decoration: BoxDecoration(
-                      //             borderRadius: BorderRadius.all(
-                      //               Radius.circular(SizeConfig.horizontal(20)),
-                      //             ),
-                      //             // ignore: use_if_null_to_convert_nulls_to_bools
-                      //           ),
-                      //           width: SizeConfig.horizontal(20),
-                      //           height: SizeConfig.horizontal(20),
-                      //           child: ClipRRect(
-                      //             borderRadius: BorderRadius.all(
-                      //               Radius.circular(SizeConfig.horizontal(20)),
-                      //             ),
-                      //             child: CachedNetworkImage(
-                      //               imageUrl: frameController.userImage.value,
-                      //               fit: BoxFit.cover,
-                      //             ),
-                      //           ),
-                      //         ),
-                      // ),
-                    ],
-                  ),
-                  SpaceSizer(vertical: 2),
 
-                  Container(
-                    width: SizeConfig.horizontal(90),
-                    height: SizeConfig.horizontal(55),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(AssetList.splashScreen),
-                        fit: BoxFit.cover,
-                      ),
-                      color: AppColors.maroon,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(SizeConfig.horizontal(1.5)),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            // Background pattern (opsional)
+            Positioned(
+              top: -50,
+              right: -50,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -30,
+              left: -30,
+              child: Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            // Main Content
+            SafeArea(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 4,
+                  ),
+                  child: Obx(
+                    () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RubikTextView(
-                          value: 'Mulai deteksi anak berkebutuhan khusus',
-                          size: SizeConfig.safeBlockHorizontal * 8.5,
-                          fontWeight: FontWeight.w600,
-                          alignText: AlignTextType.center,
-                        ),
-                        SpaceSizer(vertical: 2),
-                        CustomFlatButton(
-                          text: 'Mulai',
-                          onTap: () {
-                            Get.to(QuisonerView());
-                            animatedController.resetAnimation();
-                          },
-                          width: 45,
-                          height: 4,
-                          radius: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SpaceSizer(vertical: 6),
-                  frameController.isLoading.value == true
-                      ? CircularProgressIndicator()
-                      : SizedBox(
-                          height: SizeConfig.horizontal(100),
-                          width: SizeConfig.vertical(100),
-                          child: GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      2, // number of items in each row
-                                  mainAxisSpacing: 40, // spacing between rows
-                                  crossAxisSpacing:
-                                      18, // spacing between columns
+                        // Header dengan moon icon dan profile
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Greeting Section
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RubikTextView(
+                                  value:
+                                      'Halo, ${frameController.userName.value}',
+                                  fontWeight: FontWeight.bold,
+                                  size: SizeConfig.safeBlockHorizontal * 6,
+                                  color: Colors.white,
                                 ),
+                                SpaceSizer(vertical: 0.5),
+                                RubikTextView(
+                                  value: 'Selamat datang kembali! 👋',
+                                  fontWeight: FontWeight.w400,
+                                  size: SizeConfig.safeBlockHorizontal * 3.5,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ],
+                            ),
 
-                            itemCount: frameController
-                                .educationsList
-                                .length, // total number of items
-                            itemBuilder: (context, index) {
-                              return Obx(
-                                () => Column(
-                                  children: [
-                                    RippleButton(
-                                      onTap: () => Get.to(
-                                        ExplainView(
-                                          educationModel: frameController
-                                              .educationsList[index],
+                            // Profile Avatar & Moon Icon
+                            Row(
+                              children: [
+                                // Moon Icon
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Image.asset(
+                                    AssetList.moonIcon,
+                                    height: SizeConfig.safeBlockHorizontal * 5,
+                                    width: SizeConfig.safeBlockHorizontal * 5,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SpaceSizer(horizontal: 2),
+
+                                // Profile Avatar
+                                Obx(
+                                  () => GestureDetector(
+                                    onTap: () {
+                                      // Navigate to profile
+                                      // Get.to(() => ProfileView());
+                                    },
+                                    child: Container(
+                                      width: SizeConfig.horizontal(12),
+                                      height: SizeConfig.horizontal(12),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2,
                                         ),
-                                      ),
-
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Colors.red, // color of grid items
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                              SizeConfig.horizontal(1),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.1,
                                             ),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 2),
                                           ),
-                                        ),
-                                        height: SizeConfig.vertical(12),
-                                        child: Center(
-                                          child: CachedNetworkImage(
-                                            width: SizeConfig.screenWidth,
-                                            imageUrl: frameController
-                                                .educationsList[index]
-                                                .sourceImage,
-                                            fit: BoxFit.fill,
+                                        ],
+                                      ),
+                                      child: frameController.isLoading.value
+                                          ? Center(
+                                              child: SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.white,
+                                                    ),
+                                              ),
+                                            )
+                                          : frameController
+                                                .userImage
+                                                .value
+                                                .isNotEmpty
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              child: CachedNetworkImage(
+                                                imageUrl: frameController
+                                                    .userImage
+                                                    .value,
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    Container(
+                                                      color:
+                                                          Colors.grey.shade300,
+                                                      child: Icon(
+                                                        Icons.person,
+                                                        color: Colors
+                                                            .grey
+                                                            .shade600,
+                                                      ),
+                                                    ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(
+                                                          color: Colors
+                                                              .grey
+                                                              .shade300,
+                                                          child: Icon(
+                                                            Icons.person,
+                                                            color: Colors
+                                                                .grey
+                                                                .shade600,
+                                                          ),
+                                                        ),
+                                              ),
+                                            )
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade300,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Icon(
+                                                Icons.person_rounded,
+                                                color: Colors.grey.shade600,
+                                                size: SizeConfig.horizontal(7),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        SpaceSizer(vertical: 4),
+
+                        // Hero Card - Start Detection
+                        Container(
+                          width: double.infinity,
+                          height: SizeConfig.horizontal(50),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.white, Colors.grey.shade50],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                blurRadius: 20,
+                                offset: Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              // Background decoration
+                              Positioned(
+                                right: -20,
+                                top: -20,
+                                child: Container(
+                                  width: 120,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.blueColor.withOpacity(
+                                      0.05,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: -30,
+                                bottom: -30,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.blueColor.withOpacity(
+                                      0.05,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+
+                              // Content
+                              Padding(
+                                padding: EdgeInsets.all(
+                                  SizeConfig.safeBlockHorizontal * 5,
+                                ),
+                                child: Row(
+                                  children: [
+                                    // Left side - Text
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          RubikTextView(
+                                            value: 'Mulai Deteksi',
+                                            fontWeight: FontWeight.bold,
+                                            size:
+                                                SizeConfig.safeBlockHorizontal *
+                                                5.5,
+                                            color: AppColors.blackColor,
                                           ),
-                                        ),
+                                          SpaceSizer(vertical: 1),
+                                          RubikTextView(
+                                            value:
+                                                'Cari tahu potensi\nanak berkebutuhan khusus',
+                                            fontWeight: FontWeight.w400,
+                                            size:
+                                                SizeConfig.safeBlockHorizontal *
+                                                3.2,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                          SpaceSizer(vertical: 2),
+                                          CustomFlatButton(
+                                            text: 'Mulai Sekarang',
+                                            onTap: () {
+                                              Get.to(() => QuisonerView());
+                                              animatedController
+                                                  .resetAnimation();
+                                            },
+                                            width: 50,
+                                            height: 4,
+                                            radius: 2,
+                                            textSize: 3.2,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: SizeConfig.horizontal(40),
-                                      child: RubikTextView(
-                                        alignText: AlignTextType.center,
-                                        value: frameController
-                                            .educationsList[index]
-                                            .title,
-                                        fontWeight: FontWeight.w600,
-                                        size:
-                                            SizeConfig.safeBlockHorizontal *
-                                            3.5,
+
+                                    // Right side - Image/Icon
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height: 100,
+                                        child: Icon(
+                                          Icons.psychology_rounded,
+                                          color: AppColors.blueColor
+                                              .withOpacity(0.3),
+                                          size: 80,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              );
-                            },
+                              ),
+                            ],
                           ),
                         ),
-                ],
+
+                        SpaceSizer(vertical: 4),
+
+                        // Education Section Title
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.school_rounded,
+                              color: Colors.white,
+                              size: SizeConfig.safeBlockHorizontal * 5,
+                            ),
+                            SpaceSizer(horizontal: 2),
+                            RubikTextView(
+                              value: 'Edukasi & Informasi',
+                              fontWeight: FontWeight.bold,
+                              size: SizeConfig.safeBlockHorizontal * 4.5,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+
+                        SpaceSizer(vertical: 2),
+
+                        // Education Grid
+                        frameController.isLoading.value
+                            ? Container(
+                                height: 200,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                      SpaceSizer(vertical: 2),
+                                      RubikTextView(
+                                        value: 'Memuat data edukasi...',
+                                        fontWeight: FontWeight.w400,
+                                        size:
+                                            SizeConfig.safeBlockHorizontal *
+                                            3.5,
+                                        color: Colors.white.withOpacity(0.8),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : frameController.educationsList.isEmpty
+                            ? Container(
+                                height: 200,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.school_outlined,
+                                        size: 50,
+                                        color: Colors.white.withOpacity(0.5),
+                                      ),
+                                      SpaceSizer(vertical: 2),
+                                      RubikTextView(
+                                        value: 'Belum ada edukasi tersedia',
+                                        fontWeight: FontWeight.w400,
+                                        size:
+                                            SizeConfig.safeBlockHorizontal *
+                                            3.5,
+                                        color: Colors.white.withOpacity(0.7),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing:
+                                          SizeConfig.safeBlockVertical * 2,
+                                      crossAxisSpacing:
+                                          SizeConfig.safeBlockHorizontal * 3,
+                                      childAspectRatio: 0.8,
+                                    ),
+                                itemCount:
+                                    frameController.educationsList.length > 4
+                                    ? 4
+                                    : frameController.educationsList.length,
+                                itemBuilder: (context, index) {
+                                  final education =
+                                      frameController.educationsList[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => ExplainView(
+                                          educationModel: education,
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(16),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.1,
+                                            ),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Image
+                                          Expanded(
+                                            flex: 3,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                    top: Radius.circular(16),
+                                                  ),
+                                              child: CachedNetworkImage(
+                                                imageUrl: education.sourceImage,
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                placeholder: (context, url) =>
+                                                    Container(
+                                                      color:
+                                                          Colors.grey.shade200,
+                                                      child: Icon(
+                                                        Icons.image_outlined,
+                                                        color: Colors
+                                                            .grey
+                                                            .shade400,
+                                                        size: 30,
+                                                      ),
+                                                    ),
+                                                errorWidget:
+                                                    (
+                                                      context,
+                                                      url,
+                                                      error,
+                                                    ) => Container(
+                                                      color:
+                                                          Colors.grey.shade200,
+                                                      child: Icon(
+                                                        Icons
+                                                            .broken_image_outlined,
+                                                        color: Colors
+                                                            .grey
+                                                            .shade400,
+                                                        size: 30,
+                                                      ),
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                          // Title
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding: EdgeInsets.all(
+                                                SizeConfig.safeBlockHorizontal *
+                                                    2,
+                                              ),
+                                              child: RubikTextView(
+                                                value: education.title,
+                                                fontWeight: FontWeight.w600,
+                                                size:
+                                                    SizeConfig
+                                                        .safeBlockHorizontal *
+                                                    3.2,
+                                                color: AppColors.blackColor,
+                                                maxLines: 2,
+                                                overFlow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+
+                        SpaceSizer(vertical: 4),
+
+                        // Footer
+                        Center(
+                          child: RubikTextView(
+                            value: '© 2024 ABK Detection App',
+                            fontWeight: FontWeight.w400,
+                            size: SizeConfig.safeBlockHorizontal * 2.8,
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                        ),
+
+                        SpaceSizer(vertical: 2),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

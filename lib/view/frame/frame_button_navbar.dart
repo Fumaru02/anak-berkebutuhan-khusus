@@ -122,17 +122,12 @@ class FrameBottomNav extends FrameAppBar {
         label: 'History',
         index: 1,
       ),
-      _bottomNavigationBarItemDefault(
-        frameController: frameController,
-        asset: AssetList.detectIcon,
-        label: 'Detection',
-        index: 2,
-      ),
+
       _bottomNavigationBarItemDefault(
         frameController: frameController,
         asset: AssetList.profileIcon,
         label: 'Profile',
-        index: 3,
+        index: 2,
       ),
     ];
   }

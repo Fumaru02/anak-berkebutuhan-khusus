@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anak_berkebutuhan_khusus/models/quisoner/quisoner_model.dart';
+import 'package:anak_berkebutuhan_khusus/models/quisoner_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -269,7 +269,7 @@ class QuisonerController extends GetxController {
     return double.parse(persentase.toStringAsFixed(2));
   }
 
-  void collectiongScore() {
+  void collectiongScore() async {
     if (currentPage.value == 12) {
       finalScoreADHD.value = calculateScore();
       log('Clear bobot quisoner');
@@ -287,6 +287,7 @@ class QuisonerController extends GetxController {
     }
     if (currentPage.value == 45) {
       finalScoreTUNAGRAHITA.value = calculateScore();
+      await uploadScoreHistory();
       log('Clear bobot quisoner');
       bobotQuisoner.clear();
     }

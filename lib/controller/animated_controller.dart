@@ -12,7 +12,7 @@ class AnimatedController extends GetxController {
   // Gunakan RxBool sebagai ganti ValueNotifier
   final Rx<AnimState> currentState = AnimState.none.obs;
 
- late PageController pageViewController;
+  late PageController pageViewController;
   var currentPageIndex = 0.obs;
 
   @override
@@ -35,7 +35,6 @@ class AnimatedController extends GetxController {
     );
     currentPageIndex.value = index;
   }
-
 
   void resetAnimation() {
     height.value = 40.0;
