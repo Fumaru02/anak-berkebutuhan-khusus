@@ -40,6 +40,7 @@ class FrameController extends GetxController {
     <EducationModel>[],
   );
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   RxList<HistoryModel> historyList = RxList<HistoryModel>(<HistoryModel>[]);
   RxString userEmail = RxString('');

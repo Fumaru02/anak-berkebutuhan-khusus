@@ -526,7 +526,6 @@ class IndicationPart extends StatelessWidget {
                 width: 96,
                 text: 'Selesai',
                 onTap: () async {
-                  await quisonerController.uploadScoreHistory();
                 },
               ),
             ),

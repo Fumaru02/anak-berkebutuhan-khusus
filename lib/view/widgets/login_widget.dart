@@ -66,11 +66,16 @@ class LoginWidget extends StatelessWidget {
                         color: AppColors.blackColor,
                       ),
                       Spacer(),
-                      RubikTextView(
-                        value: 'Lupa kata sandi?',
-                        size: SizeConfig.safeBlockHorizontal * 3,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.blueColor,
+                      RippleButton(
+                        onTap: () {
+                          
+                        },
+                        child: RubikTextView(
+                          value: 'Lupa kata sandi?',
+                          size: SizeConfig.safeBlockHorizontal * 3,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.blueColor,
+                        ),
                       ),
                       SpaceSizer(horizontal: 4),
                     ],

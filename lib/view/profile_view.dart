@@ -113,7 +113,7 @@ class ProfileView extends StatelessWidget {
                                               .userEmail
                                               .value
                                               .isNotEmpty
-                                          ? frameController.userName.value[0]
+                                          ? frameController.userEmail.value[0]
                                                 .toUpperCase()
                                           : '?',
                                       fontWeight: FontWeight.bold,
@@ -128,8 +128,8 @@ class ProfileView extends StatelessWidget {
                               Obx(
                                 () => RubikTextView(
                                   value:
-                                      frameController.userEmail.value.isNotEmpty
-                                      ? frameController.userEmail.value
+                                      frameController.userName.value.isNotEmpty
+                                      ? frameController.userName.value
                                       : 'Guest User',
                                   fontWeight: FontWeight.w600,
                                   size: SizeConfig.safeBlockHorizontal * 5,
@@ -399,7 +399,7 @@ class ProfileView extends StatelessWidget {
                                 SpaceSizer(vertical: 1.5),
                                 CustomTextField(
                                   controller:
-                                      frameController.passwordController,
+                                      frameController.confirmPasswordController,
                                   title: 'Konfirmasi Kata Sandi',
                                   hintText: 'Konfirmasi kata sandi baru',
                                   prefixIcon: Icon(
@@ -507,6 +507,7 @@ class ProfileView extends StatelessWidget {
 
   // Dialog konfirmasi logout
   void _showLogoutDialog(BuildContext context) {
+    final FrameController frameController = Get.put(FrameController());
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -546,8 +547,7 @@ class ProfileView extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               // Logout logic
-              Get.back();
-              // Get.offAllNamed('/login');
+              frameController.signOut();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade600,
