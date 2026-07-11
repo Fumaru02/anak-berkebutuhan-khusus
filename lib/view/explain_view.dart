@@ -1,21 +1,14 @@
-import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
 import 'package:anak_berkebutuhan_khusus/models/education_model.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_colors.dart';
 import 'package:anak_berkebutuhan_khusus/utils/app_fonts.dart';
-import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
 import 'package:anak_berkebutuhan_khusus/utils/space_sizer.dart';
 import 'package:anak_berkebutuhan_khusus/view/frame/frame_scaffold.dart';
-import 'package:anak_berkebutuhan_khusus/view/quisoner/widget/quisoner.dart';
 import 'package:anak_berkebutuhan_khusus/view/widgets/blue_strip.dart';
-import 'package:anak_berkebutuhan_khusus/view/widgets/custom_flatbutton.dart';
-import 'package:anak_berkebutuhan_khusus/view/widgets/custom_text_field.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class ExplainView extends StatelessWidget {
   const ExplainView({required this.educationModel, super.key});
@@ -24,7 +17,6 @@ class ExplainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AnimatedController animatedController = Get.put(AnimatedController());
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.black,

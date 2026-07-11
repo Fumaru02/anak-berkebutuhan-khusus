@@ -2,6 +2,7 @@ import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
 import 'package:anak_berkebutuhan_khusus/utils/asset_list.dart';
 import 'package:anak_berkebutuhan_khusus/utils/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:get/get.dart';
 
 class WhiteWaveContainer extends StatelessWidget {
@@ -19,8 +20,8 @@ class WhiteWaveContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final AnimatedController animatedController =
         Get.find<AnimatedController>();
-    return Obx(
-      () => SizedBox(
+    return KeyboardSizeProvider(
+      child: SizedBox(
         width: SizeConfig.horizontal(
           height ?? animatedController.width.toDouble(),
         ),
@@ -43,7 +44,9 @@ class WhiteWaveContainer extends StatelessWidget {
             ),
           ),
           child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: child,
           ),
         ),

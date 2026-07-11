@@ -24,6 +24,7 @@ class WelcomeView extends StatelessWidget {
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
       child: FrameScaffold(
+        avoidBottomInset: true,
         heightBar: 0,
         elevation: 0,
         color: Colors.black,

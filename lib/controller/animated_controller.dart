@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 class AnimatedController extends GetxController {
   final RxDouble height = RxDouble(40.0);
   final RxDouble width = RxDouble(100.0);
+  final RxDouble heightTransformAnimate = RxDouble(60.0);
   final RxBool onTapped = RxBool(false);
   final RxBool onTapIsDaftar = RxBool(false);
 

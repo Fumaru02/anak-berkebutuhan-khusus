@@ -48,6 +48,7 @@ class FrameBottomNav extends FrameAppBar {
         child: Scaffold(
           backgroundColor: colorScaffold,
           extendBody: true,
+          resizeToAvoidBottomInset: true,
           appBar: FrameAppBar(
             titleScreen: titleScreen,
             heightBar: heightBar,

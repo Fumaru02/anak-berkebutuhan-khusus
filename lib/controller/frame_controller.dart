@@ -7,13 +7,10 @@ import 'package:anak_berkebutuhan_khusus/models/history_model.dart';
 import 'package:anak_berkebutuhan_khusus/view/history_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/home_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/profile_view.dart';
-import 'package:anak_berkebutuhan_khusus/view/quisoner/quisoner_view.dart';
 import 'package:anak_berkebutuhan_khusus/view/welcome_view.dart';
-import 'package:anak_berkebutuhan_khusus/view/widgets/login_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class FrameController extends GetxController {

@@ -43,6 +43,7 @@ dependencies:
   cached_network_image: ^3.4.1
   json_annotation: ^4.9.0
   flutter_html: ^3.0.0
+  flutter_keyboard_size: ^1.0.1
 
 dev_dependencies:
   flutter_test:

@@ -67,9 +67,7 @@ class LoginWidget extends StatelessWidget {
                       ),
                       Spacer(),
                       RippleButton(
-                        onTap: () {
-                          
-                        },
+                        onTap: () {},
                         child: RubikTextView(
                           value: 'Lupa kata sandi?',
                           size: SizeConfig.safeBlockHorizontal * 3,

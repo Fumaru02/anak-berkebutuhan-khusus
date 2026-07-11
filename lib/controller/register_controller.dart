@@ -13,7 +13,6 @@ class RegisterController extends GetxController
   late TabController tabController;
   final RxBool isObscurePassword = true.obs;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
