@@ -67,7 +67,57 @@ class LoginWidget extends StatelessWidget {
                       ),
                       Spacer(),
                       RippleButton(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const RubikTextView(
+                                value: "Masukkan email-mu untuk reset password",
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              content: SizedBox(
+                                width: SizeConfig.horizontal(20),
+                                height: SizeConfig.horizontal(35),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CustomTextField(
+                                          controller: loginViewController
+                                              .emailController,
+                                          title: 'Email',
+                                          width: SizeConfig.horizontal(15),
+                                          height: SizeConfig.horizontal(25),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                CustomFlatButton(
+                                  width: 40,
+                                  height: 5,
+                                  text: 'Reset Password',
+                                  onTap: () =>
+                                      loginViewController.resetPassword(),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: const RubikTextView(
+                                    value: "Cancel",
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         child: RubikTextView(
                           value: 'Lupa kata sandi?',
                           size: SizeConfig.safeBlockHorizontal * 3,
