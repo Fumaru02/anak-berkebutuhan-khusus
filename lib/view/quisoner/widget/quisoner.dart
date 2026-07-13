@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:anak_berkebutuhan_khusus/controller/animated_controller.dart';
+import 'package:anak_berkebutuhan_khusus/controller/frame_controller.dart';
 import 'package:anak_berkebutuhan_khusus/controller/login_view_controller.dart';
 import 'package:anak_berkebutuhan_khusus/controller/quisoner_controller.dart';
 import 'package:anak_berkebutuhan_khusus/models/quisoner_model.dart';
@@ -27,6 +28,7 @@ class Quisoner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FrameController frameController = Get.put(FrameController());
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +36,15 @@ class Quisoner extends StatelessWidget {
           SpaceSizer(vertical: 5),
 
           RippleButton(
-            onTap: () => Get.back(),
+            onTap: () async {
+              await frameController.getHistory(frameController.userName.value);
+              Get.back();
+              quisonerController.finalScoreADHD.value = 0;
+              quisonerController.finalScoreASD.value = 0;
+              quisonerController.finalScoreDISLEKSIA.value = 0;
+              quisonerController.finalScoreTUNAGRAHITA.value = 0;
+              quisonerController.currentPage.value = 0;
+            },
             child: Image.asset(
               AssetList.kembaliIcon,
               width: SizeConfig.horizontal(30),
@@ -517,19 +527,6 @@ class IndicationPart extends StatelessWidget {
           // Info tambahan
 
           // Tombol Selesai dengan Obx
-          SpaceSizer(vertical: 1),
-
-          Obx(
-            () => Center(
-              child: CustomFlatButton(
-                loading: quisonerController.isLoading.value,
-                width: 96,
-                text: 'Selesai',
-                onTap: () async {
-                },
-              ),
-            ),
-          ),
         ],
       ),
     );
