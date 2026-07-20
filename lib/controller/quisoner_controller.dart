@@ -89,7 +89,7 @@ class QuisonerController extends GetxController {
   }
 
   void saveAllAnswers(int totalItems) {
-    double weight = getWeight(selectedIndex.value, totalItems);
+    double weight = getCFWeight(selectedIndex.value, totalItems);
     bobotQuisoner.add(weight);
     hasChangedTitle.value = bobotQuisoner.length;
     log('Jumlah data BOBOT ADHD: ${bobotQuisoner.length}');
@@ -115,9 +115,19 @@ class QuisonerController extends GetxController {
     selectedIndex.value = -1;
   }
 
-  double getWeight(int index, int totalItems) {
-    if (totalItems <= 1) return 1.0;
-    return 1.0 + (index * (4.0 / (totalItems - 1)));
+  // Method untuk mendapatkan CF dari index
+  double getCFWeight(int index, int totalItems) {
+    // Konversi index ke CF (0-1)
+    // Misal: 5 pilihan -> 0.0, 0.25, 0.5, 0.75, 1.0
+    if (totalItems <= 1) return 0.0;
+
+    double cf = index / (totalItems - 1);
+
+    // Pastikan dalam rentang 0-1
+    if (cf < 0) return 0.0;
+    if (cf > 1) return 1.0;
+
+    return cf;
   }
 
   String formatIndonesianDateTime(DateTime dateTime) {
@@ -209,7 +219,8 @@ class QuisonerController extends GetxController {
   }
 
   void selectItem(int index, int totalItems) {
-    double weight = getWeight(index, totalItems);
+    // Konversi ke CF (0-1)
+    double cf = getCFWeight(index, totalItems);
 
     if (selectedIndex.value == index) {
       // Jika index sama, unselect
@@ -222,51 +233,94 @@ class QuisonerController extends GetxController {
       // Pilih index baru
       selectedIndex.value = index;
 
-      // Ganti isi list dengan weight yang baru (bukan menambah)
+      // Ganti isi list dengan CF yang baru (bukan menambah)
       selectedAnswerADHD.clear(); // Kosongkan dulu
-      selectedAnswerADHD.add(weight); // Tambahkan yang baru
+      selectedAnswerADHD.add(cf); // Tambahkan yang baru
 
-      print('Selected index: $index, Bobot: $weight');
+      print('Selected index: $index, CF: ${cf.toStringAsFixed(2)}');
+      update();
     }
-
-    log('Jumlah jawaban terpilih: ${selectedAnswerADHD.length}');
-    update();
   }
 
   double calculateScore() {
     // 1. Log semua data
-    print('========== DATA BOBOT ADHD ==========');
+    print('========== DATA BOBOT (CF) ==========');
     for (int i = 0; i < bobotQuisoner.length; i++) {
       print('Pertanyaan ${i + 1}: ${bobotQuisoner[i]}');
     }
     print('Total data: ${bobotQuisoner.length}');
-    print('=====================================');
+    print('===========================================');
 
-    // 2. Hitung Total Skor
-    double totalSkor = bobotQuisoner.fold(
-      0,
-      (double sum, weight) => sum + weight,
-    );
-    print('✅ Total Skor: $totalSkor');
+    // 2. Konversi bobot ke Certainty Factor (0-1)
+    List<double> cfValues = [];
+    for (int i = 0; i < bobotQuisoner.length; i++) {
+      double bobot = bobotQuisoner[i];
 
-    // 3. Hitung Skor Maksimal
-    int jumlahPernyataan = bobotQuisoner.length;
-    int skorMaksimal = jumlahPernyataan * 5; // Maksimal 5 per pertanyaan
-    print('✅ Jumlah Pernyataan: $jumlahPernyataan');
-    print('✅ Skor Maksimal: $skorMaksimal');
+      // Bobot sudah dalam bentuk CF (0-1)
+      // Normalisasi jika perlu
+      double cf = _normalizeCF(bobot);
+      cfValues.add(cf);
 
-    // 4. Hitung Persentase
-    double persentase = (totalSkor / skorMaksimal) * 100;
-    print('✅ Persentase: ${persentase.toStringAsFixed(2)}%');
+      print(
+        '📊 Pertanyaan ${i + 1}: Bobot=${bobot.toStringAsFixed(2)} -> CF=${cf.toStringAsFixed(2)}',
+      );
+    }
+    print('===========================================');
 
-    print('=====================================');
+    // 3. Hitung CF menggunakan metode kombinasi
+    double cfResult = _combineCF(cfValues);
+    print('✅ CF Hasil Kombinasi: ${(cfResult * 100).toStringAsFixed(2)}%');
+    print('===========================================');
 
-    // 5. Simpan hasil ke variabel (opsional)
-    // this.totalSkor.value = totalSkor;
-    // this.skorMaksimal.value = skorMaksimal;
-    // this.persentase.value = persentase;
+    // 4. Konversi ke persentase (0-100)
+    double persentase = cfResult * 100;
 
-    return double.parse(persentase.toStringAsFixed(2));
+    // 5. Pembulatan ke 2 desimal
+    double finalScore = double.parse(persentase.toStringAsFixed(2));
+    print('✅ Skor Akhir: $finalScore%');
+    print('===========================================');
+
+    return finalScore;
+  }
+
+  // Method untuk normalisasi CF (jika bobot belum dalam rentang 0-1)
+  double _normalizeCF(double bobot) {
+    // Jika bobot sudah dalam rentang 0-1
+    if (bobot >= 0 && bobot <= 1) {
+      return bobot;
+    }
+
+    // Jika bobot dalam rentang 0-100 (persentase)
+    if (bobot > 1 && bobot <= 100) {
+      return bobot / 100;
+    }
+
+    // Jika bobot dalam rentang 1-5 (Likert)
+    if (bobot >= 1 && bobot <= 5) {
+      return (bobot - 1) / 4;
+    }
+
+    // Default
+    print('⚠️ Peringatan: Nilai bobot ${bobot} tidak dikenal, menggunakan 0.0');
+    return 0.0;
+  }
+
+  // Method untuk mengkombinasikan CF
+  double _combineCF(List<double> cfValues) {
+    if (cfValues.isEmpty) return 0.0;
+
+    // Filter CF yang valid (> 0)
+    List<double> validCF = cfValues.where((cf) => cf > 0.0).toList();
+
+    if (validCF.isEmpty) return 0.0;
+
+    // Metode kombinasi CF: CF1 + CF2 * (1 - CF1)
+    double result = validCF.first;
+    for (int i = 1; i < validCF.length; i++) {
+      result = result + validCF[i] * (1 - result);
+    }
+
+    return result;
   }
 
   void collectiongScore() async {
